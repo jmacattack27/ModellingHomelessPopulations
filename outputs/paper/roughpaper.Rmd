@@ -1,0 +1,117 @@
+---
+title: "Week 3 Tutorial"
+author: "Jack McKay"
+date: "1/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("opendatatoronto")
+library(opendatatoronto)
+library(tidyverse)
+library(tidyr)
+library(knitr)
+library(janitor)
+library(lubridate)
+
+citation("opendatatoronto")
+```
+
+```{r}
+lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
+Sys.setlocale("LC_TIME", lct)
+```
+
+
+```{r}
+## Acquire Dataset ##
+populations <-
+  list_package_resources("ac77f532-f18b-427c-905c-4ae87ce69c93") %>% 
+  filter(name == "toronto-shelter-system-flow")  %>%  
+  get_resource()
+```
+
+
+```{r} 
+populations$`date(mmm-yy)` <- Map(paste, populations$`date(mmm-yy)`, "-01", sep="")
+populations$`date(mmm-yy)` <- strptime(populations$`date(mmm-yy)`, "%b-%y-%d")
+populations$`date(mmm-yy)` <- as.Date(populations$`date(mmm-yy)`, format = "%Y-%m-%d")
+names(populations)[2] <- "Date"
+```
+
+
+```{r}
+## Clean Dataset ##
+homeless_type <-
+  populations %>% 
+  select(population_group, Date, ageunder16, `age16-24`, `age25-44`, `age45-64`, age65over)
+
+homeless_type <- 
+  homeless_type %>% 
+    tidyr::gather("Age Group", "Population", 3:7)
+
+write_csv(
+  x = homeless_type, 
+  file = "homeless_types.csv"
+  )
+```
+
+
+```{r} 
+read_csv("cleaned_populations.csv")
+populations_clean$`date(mmm-yy)` <- Map(paste, populations_clean$`date(mmm-yy)`, "-01", sep="")
+populations_clean$`date(mmm-yy)` <- strptime(populations_clean$`date(mmm-yy)`, "%b-%y-%d")
+populations_clean$`date(mmm-yy)` <- as.Date(populations_clean$`date(mmm-yy)`, format = "%Y-%m-%d")
+names(populations_clean)[1] <- "Date"
+```
+
+
+
+```{r}
+#### Explore ####
+
+# This graph shows the breakdown of homeless populations, grouped by age, based on population group, on January 1st, 2020
+
+homeless_pop <- 
+  homeless_type %>% 
+  filter(Date == as.Date("2021-01-01")) %>% 
+  filter(population_group != "All Population")
+
+homeless_pop %>% 
+  ggplot( aes(x = `Age Group`, y = Population, fill = population_group, label = Population)) +
+  geom_col(stat="identity") +
+  geom_text(stat = "identity", size = 2, position = position_stack(vjust = 0.5), check_overlap = TRUE)
+```
+
+Here we can see that by far the most populous age group is 25-44, accounting for 40.42% of the total homeless population.
+
+Additionally, we note that an especially high proportion of homeless people younger than 16 years of age are refugees; 35.37%. In comparison, of the 7210 homeless people 16 or older, only 776 are refugees (10.76%).
+
+Conversely, Indigenous people comprise a remarkably low proportion of the under 16 age group, accounting for less than 1%, compared to 12.22% of the total population older than 16. 
+
+```{r}
+## Explore ##
+
+# This graph shows how homeless populations, grouped by age, fluctuate throughout the year
+
+total_homeless <-
+  homeless_type %>% 
+  filter(population_group == 'All Population')
+
+
+total_homeless %>% 
+  ggplot(aes(x = Date, y = Population, color = `Age Group`, group = 2)) +
+  scale_x_date(date_labels = "%Y-%m") + 
+  geom_point() +
+  geom_line(aes(group = `Age Group`))
+```
+
+Here we see that the homeless populations aged 45 and older have risen over the last 2 years, whereas the population younger than 45 has declined. Similarly, aside from the 65+ age group, we notice a substantial decrease in shelter flow across all populations between January 2020 and July 2020. This decrease is by far the most dramatic in the 25-44 age group. This could be because that is the age group that is most likely to be age to survive outside of shelters
+
+
+
+
