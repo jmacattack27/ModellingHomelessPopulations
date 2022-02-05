@@ -15,14 +15,17 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r, include=FALSE}
-# install.packages("opendatatoronto")
+```{r, include = FALSE}
+#install.packages("opendatatoronto")
 library(opendatatoronto)
 library(tidyverse)
 library(tidyr)
 library(knitr)
 library(janitor)
 library(lubridate)
+library(tibble)
+library(dplyr)
+library(scales)
 ```
 
 # Introduction
@@ -35,11 +38,8 @@ As the homeless populace of Toronto grows, so too does the importance of the Tor
 This report aims to identify and highlight the areas of the Toronto Shelter System that are most in need of funding, through analyzing trends in the homeless population as a whole, as well as the sub-populations of people that make up the aggregate.  
 
 
-You can and should cross-reference sections and sub-sections. For instance, Section \@ref(data). R Markdown automatically makes the sections lower case and adds a dash to spaces to generate labels, for instance, Section \@ref(first-discussion-point). 
-
-
-
 # Data
+
 
 ## Data Source ##
 
@@ -51,6 +51,51 @@ The data used in this report was collected through the Shelter Management Inform
 This dataset contains information on the daily occupancy and capacity of Toronto’s shelter system since January 2020. SMIS records the number of unique people who have used the shelter system at least one time per month for the last 3 months, who have not been discharged to permanent housing. Data is recorded daily at 4 a.m., and includes occupancy, vacancy and capacity data for each service. This data is recorded based on the capacity type for each program, either bed based capacity (where occupancy is measured based at the bed level) or room based capacity (where occupancy is measured at the room level). Note that in room based capacity, entire households share a single room, so the total number of individuals served is often greater than both capacity and occupancy.  
 
 SMIS records the age and gender of individuals, as well as if they: have used a shelter service in the last 3 months (Actively Homeless), have used the shelter system previously but not in the last 3 months and have now returned (Returned to Shelter), have previously been discharged to permanent housing and have used the shelter system in the recording month (Returned from Housing), are using a shelter for the first time (Newly Identified), or if they have previously used a shelter service, but not in the last 3 months (No Recent Shelter Use). Additionally, SMIS records data on various sub-populations, including: Chronically Homeless, Families, Single Adult, Unaccompanied Youth, Refugees and Indigenous. Someone who is Chronically Homeless is defined as having recorded a minimum of 180 overnight stays in the past year (365 days); or having recurrent overnight stays over the past three years with a cumulative duration of at least 546 nights. 
+
+
+## Data Characteristics ##
+
+The first aspect of the data I investigated relates to the attrition rate of housing, ie; the likelihood that a homeless person moved to permanent housing does not return to the shelter. Figure \@ref(fig:housingattrition) graphs the number of people moved into permanent housing against the number of people who have returned to a shelter from after being moved to permanent housing. There has been a sharp decrease in the number of people being moved to housing since the beginning of 2020, while the number of people returning to shelters after being placed in permanent housing has remained relatively stable. This indicates a sharp decrease in the attrition rates of housing placements, which is one of the primary gauges of how successful Toronto's homeless services are at eliminating homelessness. 
+
+
+```{r, include=FALSE}
+populations <- read.csv(here::here("inputs/data/raw_data.csv"))
+
+populations$date.mmm.yy. <- Map(paste, populations$date.mmm.yy., "-01", sep="")
+populations$date.mmm.yy. <- strptime(populations$date.mmm.yy., "%b-%y-%d")
+populations$date.mmm.yy. <- as.Date(populations$date.mmm.yy., format = "%Y-%m-%d")
+names(populations)[2] <- "Date"
+
+homeless_housing <-
+  populations %>% 
+  
+  filter(population_group == 'All Population') %>%   # Filter data so that we only look at the full population for each month
+  
+  select(Date, returned_from_housing, moved_to_housing) %>% 
+  
+  mutate(Attrition = percent(1 - returned_from_housing / moved_to_housing)) %>% 
+  
+  rename("Returned from Housing" = returned_from_housing,   # Rename columns so that table reads nicer
+         "Moved to Housing" = moved_to_housing)
+```
+
+
+
+
+
+
+```{r housingattrition, fig.cap = 'Moved to Housing vs Returned from Housing', fig.width = 8, fig.height = 4, echo = FALSE, message = FALSE, warning = FALSE, out.width = '80%', fig.align = "center"}
+
+graph_housing <-
+  homeless_housing %>% 
+  tidyr::gather("Moved to Housing vs Returned from Housing", "Population", 2:3, na.rm = FALSE, convert = FALSE) 
+
+graph_housing %>% 
+  ggplot(aes(x = Date, y = Population, color = `Moved to Housing vs Returned from Housing`, group = 2)) +
+  geom_point() +
+  geom_line(aes(group = `Moved to Housing vs Returned from Housing`))
+```
+
 
 
 # Results
