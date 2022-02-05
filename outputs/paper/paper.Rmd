@@ -1,26 +1,36 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
-author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+title: "Homeless Populations in Toronto"
+author: "Jack McKay"
 date: "`r format(Sys.time(), '%d %B %Y')`"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 output:
   bookdown::pdf_document2
 toc: FALSE
+abstract: "Shelter System Flow data was collected by the City of Toronto Open Portal, in order to record what populations are most affected by homelessness in Toronto as well as monitor how the City’s Shelter System is functioning. Shelter usage is an important factor in determining the livability and accessibility of a city, and monitoring trends and fluctuations can allow us to better cater the services provided to the populations of people that need it the most."
+thanks: 'Code and data are available at [github.com/jmacattack27/ModellingHomelessPopulations](https://github.com/jmacattack27/ModellingHomelessPopulations).'
 bibliography: references.bib
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 
+
+```{r setup, include=FALSE}
+install.packages("opendatatoronto")
+library(opendatatoronto)
 library(tidyverse)
-library(palmerpenguins)
+library(tidyr)
+library(knitr)
+library(janitor)
+library(lubridate)
 ```
 
 # Introduction
+
+During the 2021 elections, there was one issue that every major party unanimously agreed upon; Canada is in the midst of a severe housing crisis, and the cost of home ownership must be lowered. Since the early 2000s, Canada experienced an intense surge in housing prices. Known as the Canadian Housing Crisis, the City of Toronto has been one of the driving forces in this surge. In the last two decades, home prices in Canada have increased by 375%, while prices in Toronto have soared over 450%(@clarke). One of the driving factor of this is the increasing commodification of houses, wherein foreign investors purchase available real estate and hold it as an investment. This greatly restricts the supply of available housing in Toronto, and has a myriad of negative consequences for citizens. One such consequence is the rapidly growing homeless population in Toronto. As is commonplace with socioeconomic issues, the ones most affected by this crisis are those who are most the most economically vulnerable. Increasingly, the trend of housing prices grows more and more detached from the trends of income prices, leading housing to become less affordable to a greater number of people as this crisis progresses. The problem of Toronto's growing homeless population has reared it's ugly head at the City over the last 2 years, as Covid-19 fears and lack of adequate social distancing in shelters caused a huge outflow of people onto the streets. This made visible to all the increasing urban destitution that has been largely driven by the housing crisis. Indeed, as this problem becomes unavoidable to even the most neglecting lawmakers, the City has responded with increasingly aggressive and vacuous measures; in the summer of 2021, the city spent $2 million on clearing homeless encampments (@draaisma). Rather than funding the swift and often brutal evictment of homeless people by overpaid and overequipped police officers, the City of Toronto must instead invest in its shelter system, and improve services aimed at eliminating homelessness at its roots. 
+
+
+As the homeless populace of Toronto grows, so too does the importance of the Toronto Shelter System, a series of services and shelters operated and funded by the City dedicated to people experiencing homelessness. Indeed, homeless shelters play a critical role in determining the livability of a city; this is especially true with a city as large and populous as Toronto. Not only do shelters provide homeless citizens with basic necessities such as food, water and safety, but they also provide access to medical care, social workers and housing workers. This means that shelters provide both temporary refuge and necessities, as well as ways to escape the harrowing cycle of homelessness. 
+
+This report aims to identify and highlight the areas of the Toronto Shelter System that are most in need of funding, through analyzing trends in the homeless population as a whole, as well as the sub-populations of people that make up the aggregate.  
+
 
 You can and should cross-reference sections and sub-sections. For instance, Section \@ref(data). R Markdown automatically makes the sections lower case and adds a dash to spaces to generate labels, for instance, Section \@ref(first-discussion-point). 
 
@@ -31,13 +41,7 @@ You can and should cross-reference sections and sub-sections. For instance, Sect
 Our data is of penguins (Figure \@ref(fig:bills)).
 
 ```{r bills, fig.cap="Bills of penguins", echo = FALSE}
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+
 ```
 
 Talk more about it.
@@ -46,14 +50,6 @@ Also bills and their average (Figure \@ref(fig:billssssss)). (Notice how you can
 
 ```{r billssssss, fig.cap="More bills of penguins", echo = FALSE, fig.width=8, fig.height=4}
 
-# This needs to be about the random data tha tI sasmpled?
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
 ```
 
 Talk way more about it. 
