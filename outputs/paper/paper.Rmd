@@ -15,7 +15,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
 ```{r, include=FALSE}
 # install.packages("opendatatoronto")
 library(opendatatoronto)
@@ -28,7 +27,7 @@ library(lubridate)
 
 # Introduction
 
-During the 2021 elections, there was one issue that every major party unanimously agreed upon; Canada is in the midst of a severe housing crisis, and the cost of home ownership must be lowered. Since the early 2000s, Canada experienced an intense surge in housing prices. Known as the Canadian Housing Crisis, the City of Toronto has been one of the driving forces in this surge. In the last two decades, home prices in Canada have increased by 375%, while prices in Toronto have soared over 450%(@clarke). One of the driving factor of this is the increasing commodification of houses, wherein foreign investors purchase available real estate and hold it as an investment. This greatly restricts the supply of available housing in Toronto, and has a myriad of negative consequences for citizens. One such consequence is the rapidly growing homeless population in Toronto. As is commonplace with socioeconomic issues, the ones most affected by this crisis are those who are most the most economically vulnerable. Increasingly, the trend of housing prices grows more and more detached from the trends of income prices, leading housing to become less affordable to a greater number of people as this crisis progresses. The problem of Toronto's growing homeless population has reared it's ugly head at the City over the last 2 years, as Covid-19 fears and lack of adequate social distancing in shelters caused a huge outflow of people onto the streets. This made visible to all the increasing urban destitution that has been largely driven by the housing crisis. Indeed, as this problem becomes unavoidable to even the most neglecting lawmakers, the City has responded with increasingly aggressive and vacuous measures; in the summer of 2021, the city spent $2 million on clearing homeless encampments (@draaisma). Rather than funding the swift and often brutal evictment of homeless people by overpaid and overequipped police officers, the City of Toronto must instead invest in its shelter system, and improve services aimed at eliminating homelessness at its roots. 
+During the 2021 elections, there was one issue that every major party unanimously agreed upon; Canada is in the midst of a severe housing crisis, and the cost of home ownership must be lowered. Since the early 2000s, Canada experienced an intense surge in housing prices. Known as the Canadian Housing Crisis, the City of Toronto has been one of the driving forces in this surge. In the last two decades, home prices in Canada have increased by 375%, while prices in Toronto have soared over 450% (@clarke). One of the driving factor of this is the increasing commodification of houses, wherein foreign investors purchase available real estate and hold it as an investment. This greatly restricts the supply of available housing in Toronto, and has a myriad of negative consequences for citizens. One such consequence is the rapidly growing homeless population in Toronto. As is commonplace with socioeconomic issues, the ones most affected by this crisis are those who are most the most economically vulnerable. Increasingly, the trend of housing prices grows more and more detached from the trends of income prices, leading housing to become less affordable to a greater number of people as this crisis progresses. The problem of Toronto's growing homeless population has reared it's ugly head at the City over the last 2 years, as Covid-19 fears and lack of adequate social distancing in shelters caused a huge outflow of people onto the streets. This made visible to all the increasing urban destitution that has been largely driven by the housing crisis. Indeed, as this problem becomes unavoidable to even the most neglecting lawmakers, the City has responded with increasingly aggressive and vacuous measures; in the summer of 2021, the city spent $2 million on clearing homeless encampments (@draaisma). Rather than funding the swift and often brutal evictment of homeless people by overpaid and overequipped police officers, the City of Toronto must instead invest in its shelter system, and improve services aimed at eliminating homelessness at its roots. 
 
 
 As the homeless populace of Toronto grows, so too does the importance of the Toronto Shelter System, a series of services and shelters operated and funded by the City dedicated to people experiencing homelessness. Indeed, homeless shelters play a critical role in determining the livability of a city; this is especially true with a city as large and populous as Toronto. Not only do shelters provide homeless citizens with basic necessities such as food, water and safety, but they also provide access to medical care, social workers and housing workers. This means that shelters provide both temporary refuge and necessities, as well as ways to escape the harrowing cycle of homelessness. 
@@ -42,25 +41,16 @@ You can and should cross-reference sections and sub-sections. For instance, Sect
 
 # Data
 
+## Data Source ##
+
+The data used in this report was collected through the Shelter Management Information System (SMIS), an information system used by the City of Toronto to monitor and manage shelters, warming centres, and other allied services that are funded by the City. This data was then collated and stored on the City of Toronto Open Portal, from where it was pulled for this report. 
 
 
-Talk more about it.
+## Data Collection ##
 
-Also bills and their average (Figure \@ref(fig:billssssss)). (Notice how you can change the height and width so they don't take the whole page?)
+This dataset contains information on the daily occupancy and capacity of Toronto’s shelter system since January 2020. SMIS records the number of unique people who have used the shelter system at least one time per month for the last 3 months, who have not been discharged to permanent housing. Data is recorded daily at 4 a.m., and includes occupancy, vacancy and capacity data for each service. This data is recorded based on the capacity type for each program, either bed based capacity (where occupancy is measured based at the bed level) or room based capacity (where occupancy is measured at the room level). Note that in room based capacity, entire households share a single room, so the total number of individuals served is often greater than both capacity and occupancy.  
 
-```{r billssssss, fig.cap="More bills of penguins", echo = FALSE, fig.width=8, fig.height=4}
-
-```
-
-Talk way more about it. 
-
-
-
-Equation \@ref(eq:bayes) seems useful, eh?
-
-Here's a dumb example of how to use some references: In paper we run our analysis in `R` [@citeR]. We also use the `tidyverse` which was written by @thereferencecanbewhatever If we were interested in baseball data then @citeLahman could be useful. 
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
+SMIS records the age and gender of individuals, as well as if they: have used a shelter service in the last 3 months (Actively Homeless), have used the shelter system previously but not in the last 3 months and have now returned (Returned to Shelter), have previously been discharged to permanent housing and have used the shelter system in the recording month (Returned from Housing), are using a shelter for the first time (Newly Identified), or if they have previously used a shelter service, but not in the last 3 months (No Recent Shelter Use). Additionally, SMIS records data on various sub-populations, including: Chronically Homeless, Families, Single Adult, Unaccompanied Youth, Refugees and Indigenous. Someone who is Chronically Homeless is defined as having recorded a minimum of 180 overnight stays in the past year (365 days); or having recurrent overnight stays over the past three years with a cumulative duration of at least 546 nights. 
 
 
 # Results
