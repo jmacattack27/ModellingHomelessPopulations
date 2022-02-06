@@ -26,6 +26,7 @@ library(lubridate)
 library(tibble)
 library(dplyr)
 library(scales)
+
 ```
 
 # Introduction
@@ -53,7 +54,7 @@ This dataset contains information on the daily occupancy and capacity of Toronto
 SMIS records the age and gender of individuals, as well as if they: have used a shelter service in the last 3 months (Actively Homeless), have used the shelter system previously but not in the last 3 months and have now returned (Returned to Shelter), have previously been discharged to permanent housing and have used the shelter system in the recording month (Returned from Housing), are using a shelter for the first time (Newly Identified), or if they have previously used a shelter service, but not in the last 3 months (No Recent Shelter Use). Additionally, SMIS records data on various sub-populations, including: Chronically Homeless, Families, Single Adult, Unaccompanied Youth, Refugees and Indigenous. Someone who is Chronically Homeless is defined as having recorded a minimum of 180 overnight stays in the past year (365 days); or having recurrent overnight stays over the past three years with a cumulative duration of at least 546 nights. 
 
 
-## Data Characteristics ##
+## Data Analysis ##
 
 The first aspect of the data I investigated relates to the attrition rate of housing, ie; the likelihood that a homeless person moved to permanent housing does not return to the shelter. Figure \@ref(fig:housingattrition) graphs the number of people moved into permanent housing against the number of people who have returned to a shelter from after being moved to permanent housing. There has been a sharp decrease in the number of people being moved to housing since the beginning of 2020, while the number of people returning to shelters after being placed in permanent housing has remained relatively stable. This indicates a sharp decrease in the attrition rates of housing placements, which is one of the primary gauges of how successful Toronto's homeless services are at eliminating homelessness. 
 
@@ -80,11 +81,7 @@ homeless_housing <-
 ```
 
 
-
-
-
-
-```{r housingattrition, fig.cap = 'Moved to Housing vs Returned from Housing', fig.width = 8, fig.height = 4, echo = FALSE, message = FALSE, warning = FALSE, out.width = '80%', fig.align = "center"}
+```{r housingattrition, fig.cap = 'Moved to Housing vs Returned from Housing', fig.width = 8, fig.height = 2.5, echo = FALSE, fig.align = "center", fig.pos = 'h'}
 
 graph_housing <-
   homeless_housing %>% 
@@ -97,10 +94,49 @@ graph_housing %>%
 ```
 
 
+The next aspect of the data I analyzed was the composition of the total homeless population and its fluctuations over the last two years. If applicable, the Shelter Intake Management System further classifies homeless people into the following sub-groups:
+
+  * Chronic: Refers to chronic homelessness, which is defined as someone who has recorded a minimum of 180 overnight stays in the              past year, or has recorded a cumulative 546 overnight stays in the past 3 years.
+  
+  * Families: Individuals staying in a family designated overnight service
+  
+  * Youth: Individuals that are between 16 and 24 years of age by the end of the reporting month, and who are not members of a               family, as defined above. 
+  
+  * Single Adult: Individuals that are neither classified as Youth nor as part of a family, as defined above.
+  
+  * Refugees: Individuals that either identify as refugees when registering with a shelter system, or who register into a program               designated for refugees. When registering a family, all members of the family are registered in the same way as the               household head.  
+  
+  * Non-Refugees: People who are not classified as refugees.
+  
+  * Indigenous: A person who has self-identified as First Nations, Metis or Inuit in at least one of the intakes completed by SMIS
+  
+Identifying the which groups are most prevalent in shelters can allow for better allocation of funds in order to maximize the benefits to the populations most in need. Note that people only started being classified as Indigenous starting in October 2020, and it took a brief period for the data to stabilize. As a result, data on Indigenous people only began to be included on January 2021. Figure \@ref(fig:popcomposition) shows the proportion of the total homeless population accounted for by these sub-groups. Here we can see that since January 2020, the proportion of non-refugees has increased from 70% to almost 85%, while the proportion of chronically homeless people has increased by about 10%, from 35% to over 45%. Notably, the youth population has stayed quite consistent at about 10% of the total homeless population, while the proportion of single adults has increased from about 63% to over 70%. 
+
+```{r popcomposition, fig.cap = 'Total Population Composition Since 2020', fig.width = 6, fig.height = 3, echo = FALSE, fig.align = "center", fig.pos = 'h'}
+homeless_comp <-
+  populations %>% 
+  filter(population_group != "All Population") %>% 
+  select(population_group, Date, actively_homeless, population_group_percentage)
+
+
+homeless_comp %>% 
+  ggplot(aes(x = Date, y = population_group_percentage, color = population_group, group = 2)) +
+  geom_point() +
+  geom_line(aes(group = population_group)) +
+  labs(title = "Total Population Composition Over Since 2020") +
+  ylab("Percentage of Total Population") +
+  scale_y_continuous(breaks = pretty(homeless_comp$population_group_percentage, n = 10))
+```
 
 # Results
 
+jabbadoo
+
 # Discussion
+
+
+bazoo 
+
 
 ## First discussion point
 
