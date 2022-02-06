@@ -1,10 +1,11 @@
 ---
-title: "Homeless Populations in Toronto"
+title: "The Issue of Homelessness in Toronto"
 author: "Jack McKay"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   bookdown::pdf_document2
 toc: FALSE
+subtitle: "And the changes that must be made to fix it"
 abstract: "Shelter System Flow data was collected by the City of Toronto Open Portal, in order to record what populations are most affected by homelessness in Toronto as well as monitor how the City’s Shelter System is functioning. Shelter usage is an important factor in determining the livability and accessibility of a city, and monitoring trends and fluctuations can allow us to better cater the services provided to the populations of people that need it the most."
 thanks: 'Code and data are available at [github.com/jmacattack27/ModellingHomelessPopulations](https://github.com/jmacattack27/ModellingHomelessPopulations).'
 bibliography: references.bib
@@ -26,25 +27,22 @@ library(lubridate)
 library(tibble)
 library(dplyr)
 library(scales)
-
 ```
 
 # Introduction
 
 During the 2021 elections, there was one issue that every major party unanimously agreed upon; Canada is in the midst of a severe housing crisis, and the cost of home ownership must be lowered. Since the early 2000s, Canada experienced an intense surge in housing prices. Known as the Canadian Housing Crisis, the City of Toronto has been one of the driving forces in this surge. In the last two decades, home prices in Canada have increased by 375%, while prices in Toronto have soared over 450% (@clarke). One of the driving factor of this is the increasing commodification of houses, wherein foreign investors purchase available real estate and hold it as an investment. This greatly restricts the supply of available housing in Toronto, and has a myriad of negative consequences for citizens. One such consequence is the rapidly growing homeless population in Toronto. As is commonplace with socioeconomic issues, the ones most affected by this crisis are those who are most the most economically vulnerable. Increasingly, the trend of housing prices grows more and more detached from the trends of income prices, leading housing to become less affordable to a greater number of people as this crisis progresses. The problem of Toronto's growing homeless population has reared it's ugly head at the City over the last 2 years, as Covid-19 fears and lack of adequate social distancing in shelters caused a huge outflow of people onto the streets. This made visible to all the increasing urban destitution that has been largely driven by the housing crisis. Indeed, as this problem becomes unavoidable to even the most neglecting lawmakers, the City has responded with increasingly aggressive and vacuous measures; in the summer of 2021, the city spent $2 million on clearing homeless encampments (@draaisma). Rather than funding the swift and often brutal evictment of homeless people by overpaid and overequipped police officers, the City of Toronto must instead invest in its shelter system, and improve services aimed at eliminating homelessness at its roots. 
 
-
-As the homeless populace of Toronto grows, so too does the importance of the Toronto Shelter System, a series of services and shelters operated and funded by the City dedicated to people experiencing homelessness. Indeed, homeless shelters play a critical role in determining the livability of a city; this is especially true with a city as large and populous as Toronto. Not only do shelters provide homeless citizens with basic necessities such as food, water and safety, but they also provide access to medical care, social workers and housing workers. This means that shelters provide both temporary refuge and necessities, as well as ways to escape the harrowing cycle of homelessness. 
-
-This report aims to identify and highlight the areas of the Toronto Shelter System that are most in need of funding, through analyzing trends in the homeless population as a whole, as well as the sub-populations of people that make up the aggregate.  
+As the homeless populace of Toronto grows, so too does the importance of the Toronto Shelter System, a series of services and shelters operated and funded by the City dedicated to people experiencing homelessness. Indeed, homeless shelters play a critical role in determining the livability of a city; this is especially true with a city as large and populous as Toronto. Not only do shelters provide homeless citizens with basic necessities such as food, water and safety, but they also provide access to medical care, social workers and housing workers. This means that shelters provide both temporary refuge and necessities, as well as ways to escape the harrowing cycle of homelessness. This report aims to identify and highlight the areas of the Toronto Shelter System that are most in need of funding, through analyzing trends in the homeless population as a whole, as well as the sub-populations of people that make up the aggregate.  
 
 
 # Data
 
 
+
 ## Data Source ##
 
-The data used in this report was collected through the Shelter Management Information System (SMIS), an information system used by the City of Toronto to monitor and manage shelters, warming centres, and other allied services that are funded by the City. This data was then collated and stored on the City of Toronto Open Portal, from where it was pulled for this report. 
+The data used in this report was collected through the Shelter Management Information System (SMIS), an information system used by the City of Toronto to monitor and manage shelters, warming centres, and other allied services that are funded by the City. This data was then collated and stored on the City of Toronto Open Portal (@opendatatoronto), from where it was pulled for this report. 
 
 
 ## Data Collection ##
@@ -54,18 +52,33 @@ This dataset contains information on the daily occupancy and capacity of Toronto
 SMIS records the age and gender of individuals, as well as if they: have used a shelter service in the last 3 months (Actively Homeless), have used the shelter system previously but not in the last 3 months and have now returned (Returned to Shelter), have previously been discharged to permanent housing and have used the shelter system in the recording month (Returned from Housing), are using a shelter for the first time (Newly Identified), or if they have previously used a shelter service, but not in the last 3 months (No Recent Shelter Use). Additionally, SMIS records data on various sub-populations, including: Chronically Homeless, Families, Single Adult, Unaccompanied Youth, Refugees and Indigenous. Someone who is Chronically Homeless is defined as having recorded a minimum of 180 overnight stays in the past year (365 days); or having recurrent overnight stays over the past three years with a cumulative duration of at least 546 nights. 
 
 
+
 ## Data Analysis ##
 
-The first aspect of the data I investigated relates to the attrition rate of housing, ie; the likelihood that a homeless person moved to permanent housing does not return to the shelter. Figure \@ref(fig:housingattrition) graphs the number of people moved into permanent housing against the number of people who have returned to a shelter from after being moved to permanent housing. There has been a sharp decrease in the number of people being moved to housing since the beginning of 2020, while the number of people returning to shelters after being placed in permanent housing has remained relatively stable. This indicates a sharp decrease in the attrition rates of housing placements, which is one of the primary gauges of how successful Toronto's homeless services are at eliminating homelessness. 
+This dataset was processed and analyzed using the R programming language (@citeR), as well as tidyverse (@tidyverse), tidyr (@tidyr) and dplyr (@dplyr) programming packages. The package janitor (@janitor) was used to clean column names, and lubridate (@lubridate) was used to convert integers into date objects, as well as reformat dates and times. ggplot2 (@ggplot2) was used to make the graphs featured throughout the paper, while scales (@scales) was used to fix graph axis in order to make them more readable. Finally, knitr (@knitr) was used to generate the final R Markdown report. 
+
+The first aspect of the data I investigated relates to the success rate of permanent housing placements, ie; the likelihood that a homeless person moved to permanent housing does not return to the shelter. Figure \@ref(fig:housingattrition) graphs the number of people moved into permanent housing against the number of people who have returned to a shelter from after being moved to permanent housing. There has been a sharp decrease in the number of people being moved to housing since the beginning of 2020, while the number of people returning to shelters after being placed in permanent housing has remained relatively stable. This indicates that in the success rates of housing placements are declining, which is one of the primary gauges of how successful Toronto's homeless services are at helping citizens escape homelessness.  
 
 
 ```{r, include=FALSE}
 populations <- read.csv(here::here("inputs/data/raw_data.csv"))
 
+# First changing the formatting of dates, as well as changing them to date objects
+
 populations$date.mmm.yy. <- Map(paste, populations$date.mmm.yy., "-01", sep="")
 populations$date.mmm.yy. <- strptime(populations$date.mmm.yy., "%b-%y-%d")
 populations$date.mmm.yy. <- as.Date(populations$date.mmm.yy., format = "%Y-%m-%d")
+
+# Renaming some of the columns of the dataset in order to read nicer
+
 names(populations)[2] <- "Date"
+names(populations)[10] <- "Under 16"
+names(populations)[11] <- "16 to 24"
+names(populations)[12] <- "25 to 44"
+names(populations)[13] <- "45 to 64"
+names(populations)[14] <- "65 or older"
+
+
 
 homeless_housing <-
   populations %>% 
@@ -92,7 +105,7 @@ graph_housing %>%
   geom_point() +
   geom_line(aes(group = `Moved to Housing vs Returned from Housing`))
 ```
-
+\newpage
 
 The next aspect of the data I analyzed was the composition of the total homeless population and its fluctuations over the last two years. If applicable, the Shelter Intake Management System further classifies homeless people into the following sub-groups:
 
@@ -112,7 +125,7 @@ The next aspect of the data I analyzed was the composition of the total homeless
   
 Identifying the which groups are most prevalent in shelters can allow for better allocation of funds in order to maximize the benefits to the populations most in need. Note that people only started being classified as Indigenous starting in October 2020, and it took a brief period for the data to stabilize. As a result, data on Indigenous people only began to be included on January 2021. Figure \@ref(fig:popcomposition) shows the proportion of the total homeless population accounted for by these sub-groups. Here we can see that since January 2020, the proportion of non-refugees has increased from 70% to almost 85%, while the proportion of chronically homeless people has increased by about 10%, from 35% to over 45%. Notably, the youth population has stayed quite consistent at about 10% of the total homeless population, while the proportion of single adults has increased from about 63% to over 70%. 
 
-```{r popcomposition, fig.cap = 'Total Population Composition Since 2020', fig.width = 6, fig.height = 3, echo = FALSE, fig.align = "center", fig.pos = 'h'}
+```{r popcomposition, fig.cap = 'Total Population Composition Since 2020', fig.width = 6, fig.height = 2.5, echo = FALSE, fig.align = "center", fig.pos = 'h'}
 homeless_comp <-
   populations %>% 
   filter(population_group != "All Population") %>% 
@@ -127,37 +140,58 @@ homeless_comp %>%
   ylab("Percentage of Total Population") +
   scale_y_continuous(breaks = pretty(homeless_comp$population_group_percentage, n = 10))
 ```
+\newpage
+
+
+The final aspect of the data that I analyzed was the fluctuations in the populations of various age groups of homeless people. Figure \@ref(fig:agegroups) shows how the number of homeless people in each age group has varied since January 2020. Here we can see that by far the most represented age groups are 25 to 44 and 45 to 64, which is not unexpected. As well, we notice a significant drop off in most age groups starting in March 2020, with the most drastic decreases being in people aged 15 or younger, 25 to 44 and 45 to 64. Between March 2020 and July 2020, these populations declined from 1440 to 911 (36.7%), 3893 to 2962 (23.9%) and 2852 to 2331 (18.3%), respectively. This is perfectly in line with the announcement of the first lockdown in Toronto. Interestingly, while there still was a decrease in registered people aged 16 to 24, it is much less drastic than the previously mentioned age groups, despite being in the middle of two of them. As well, we notice that there is a rebound in populations aged 25 to 44 and 45 to 64 starting around June 2020, before declining again near the start of 2021. Notably, the age group 16 and under did not experience this rebound, and had a continuous decline from March 2020 to May 2021, during which point its number fell from 1440 to 569, a colossal 60.5% decrease. However since May 2021, the population has been steadily increasing, and as of December 2021 is 901, 62.6% of its pre-lockdown total. Finally, we note that the population aged 65 or older was almost completely unaffected by Covid, holding steady between 463 and 551 January 2020 to June 2021, since which point it has increased to a 2 year high of 637 in December 2021.
+
+```{r agegroups, fig.cap = 'Homeless Population by Age Group Since 2020', fig.width = 6, fig.height = 2.5, echo = FALSE, fig.align = "center", fig.pos = 'h'}
+
+total_homeless <-
+  populations %>% 
+  select(population_group, Date, `Under 16`, `16 to 24`, `25 to 44`, `45 to 64`, `65 or older`) %>% 
+  tidyr::gather("Age Group", "Population", 3:7) %>% 
+  filter(population_group == 'All Population') 
+
+total_homeless %>% 
+  ggplot(aes(x = Date, y = Population, color = `Age Group`, group = 2)) +
+  geom_point() +
+  geom_line(aes(group = `Age Group`))
+```
+
 
 # Results
 
-jabbadoo
+Initial results indicate that there are a few main areas that the city should focus its efforts on improving. The success rate of permanent housing placements has been steadily declining over the last 2 years. Finding permanent housing is the ultimate goal of 
+most homeless people, and finding permanent housing, as well as helping homeless people prepare for permanent housing, should be the primary goal of homeless shelters, aside from perhaps providing adequate short term necessities. The success rate of housing placements is down from an average of 85.1% in 2020 to 70.7% in 2021, a sharp decline. As a result, the city needs to focus more of its funding and time on improving services aimed at preparing homeless people for life in permanent housing. The main factor contributing to this decline is the steady decrease in housing placements; while the amount of homeless people returning from housing has remained relatively steady, the amount of homeless people being moved to permanent housing has declined from a monthly average of of 607 between January 2020 and April 2020 to 259 between September 2021 and December 2021. While there are a multitude of factors that could influence, the most obvious one is the increasing scarcity of housing in Toronto. 
+
+Another notable result is the increasing proportion of non-refugee homeless people, which has risen from 70.3% of the total homeless population in January 2020 to 83.5% in December 2021. Similarly, the net population of non-refugees has risen from 6975 to 7725, an increase of 10.7%. This could indicate a few trends; firstly, an increasing number of Canadians are becoming homeless. While one may not immediately consider this a negative result (after all, why should refugees be homeless?), this does reflect poorly on Canada's socioeconomic situation. Indeed, refugees are intuitively more likely to find themselves homeless, as they travel to a new country where they likely have few connections, if any, and oftentimes don't speak the native language. These factors make it harder for refugees to find work, even with the social services provided by our government. However, an increasing number of citizens becoming homeless once again indicates the increasing scarcity and rapidly rising prices of housing in Toronto. Conversely, however, the proportion of refugees has dropped drastically, from 29.7% in January 2020 to 12.4% in December 2021, with the net refugee population dropping from 2941 to 1530, a 48% decrease. This is certainly a positive change, as it shows that the services directed at refugees are working well, which reflects positively on the city as a whole. As well, as Toronto continues to be refugee friendly, it allows for an increased inflow of foreign talent and workers, which, while not specifically relevant to the homeless situation, does help the city as a whole grow. 
+
+A less positive result is the increasing proportion of chronically homeless people, which has risen from accounting for 35% of the total homeless population in January 2020 to 44.9% in December 2021. The net population rose as well, increasing 19% from 3471 to 4131. This is in line with the decreasing rate of successful housing placements, and indicates that once people become homeless, they are having an increasingly difficult time escaping homelessness. This too can be partially attributed to the ongoing housing crisis, as the chance of escaping homelessness would naturally be negatively correlated with the scarcity of housing. 
+
+Another promising result is the decreasing rate of homeless families, with 1827 homeless people registered as part of a family accounting for 19.7% of the total homeless population in December 2021, down from 2706 accounting for 27.3% in January 2020. This could indicate that the shelter services aimed at helping homeless families get off the street have been successful throughout the pandemic, which is a somewhat unlikely result, considering the emphasis on social distancing and minimizing indoor crowds. However this could also be a result of the pandemic making families more likely to leave shelters due to lack of adequate social distancing. However, the data does not strongly support the latter hypothesis, as we can see in Figure \@ref(fig:popcomposition) that the number of homeless people registered as part of a family was one of two groups that did not experience a drastic decline in numbers around March 2020, with the other group being Youth.
+
+A somewhat surprising result is the steadiness of the population of people aged 65 or older, seen in Figure \@ref(fig:agegroups), throughout the course of the pandemic. As it is the elderly who are most at risk from Covid, one might have expected that this age group would experience a sharp decline in numbers near the start of the pandemic. One possible reason for this consistency could possibly be the result of effective safety measures specifically targeted towards this age group by shelters. Another explanation is that as the oldest age group, they are likely less mobile and similarly less likely to try and survive on the streets alone, meaning that they may have had little option but to stay in shelters. A similarly perplexing trend is the lack of a noticeable rebound of the 15 or younger age group, which was in consistent decline from March 2020 to June 2021, and only began to increase in July 2021. This would indicate more young children living on the street, as the decreasing housing placements makes it unlikely that these children were moved to permanent housing.
+
+
 
 # Discussion
 
 
-bazoo 
+## Limitations and Outside Factors
+
+There are a number of factors and limitations that influence our ability to draw conclusions from this data. Firstly, this data set does not contain information on the entire homeless population of Toronto; it can only account for people who have used an overnight service. Thus people sleeping outdoors are not accounted for. Similarly, it only records information from shelter sites that use SMIS and are funded by the City of Toronto. Thus information from shelters that utilize their own information management systems, or that are funded by other levels of the government is not included in this data. This means that while the data can give us a good general idea of the trends of homeless populations, we do not get the full picture. For example, it is a safe assumption that a homeless family is more likely to register with a shelter service, as the household "heads" would be more motivated to find shelter for any children in their family. Conversely, singe adults would then be less likely to register in comparison. As a result, it is likely that the proportion of homeless families is over-represented. Similarly, refugees may be less likely to register with homeless services on account of the fact that they may not speak English, making it harder for them to learn about and locate shelter services. As well, chronically homeless people could also be under-represented, as they could be more likely to live on the street and not register with a homeless service. Chronically homeless people may also be less likely to re-register with a shelter service after a failed housing placement, for lack of faith in the effectiveness of the system. Thus we can assume that the population of chronically homeless people may be under-represented as well.
+
+Another immensely consequential factor that invariably skewed every aspect of the data is the Covid-19 pandemic, which has been ongoing since March 2020. This would have had a plethora of effects, not all of which can be accounted for. The most obvious would be the health concerns and resulting social distancing measures. Homeless shelters are often crowded, and so there would naturally be a large decline in the number of homeless people registering with shelter services throughout the pandemic. This effect made itself apparent with the increasing size and frequency of outdoor homeless encampments throughout Toronto, popping up in public squares, in parking lots, and most prominently in parks. As a result, the total homeless population is invariably and drastically under-represented over the last two years. The pandemic would similarly contribute to the sharp decrease in housing placements since January 2020; in fact, in \@ref(fig:housingattrition) we can see that there is a steep drop-off in placements starting in March 2020, when the first lockdown was announced. The number of placements begins to rebound by June 2020--when restrictions first began to ease up--before experiencing another sharp decline around September 2020, when restrictions returned. Indeed, the possible effects of the pandemic on this data are myriad, and impossible to fully account for. As such, we can only try and interpret how the data may have been skewed, and take this into account when we draw our conclusions.
 
 
-## First discussion point
+## Going Forward
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+Despite the undeniable effects the pandemic would have had on homeless populations, we can still draw some solid conclusions about what the city needs to change to improve its shelter services, as well as to work towards eliminating homelessness. The first and most obvious problem that must be addressed is the aforementioned Toronto housing crisis. While there are a number of solutions that could be implemented to address this at both a municipal and federal level, I will focus on one main avenue; preventing commodification of real estate. The commodification of real estate can be described as approaching real estate (houses, plots of land or otherwise) as an investment, as opposed to a livable property. This occurs when foreign investors, most notably from Asia, buy up properties in in areas with high demand for real estate--such as Toronto--and hold onto them as an appreciating investment. A result of this is that livable housing becomes substantially scarcer, and as a result the prices of available properties increase. Not only do these foreign investors buy up available real estate, but they commonly demolish the pre-existing, often affordable infrastructure and build more expensive (and thus profitable) rental properties. Thus, commodification not only leads to a decreased supply of purchasable homes, but also a decreased supply of affordable rental properties. Indeed, shelter is considered a fundamental human right, and therefore the commodification of real estate is the commodification and financialization of a basic human right into an investment from which to extract value. In fact, between January and August of 2021, investors accounted for more than 25% of all real estate transactions (@merali), an outrageous statistic when one considers the rapidly growing proportion of Torontonians unable to afford a home. Currently, there are no restrictions on who can buy property in Toronto, meaning that a foreign investor who has never set foot in Canada and lives full-time in another country is able to purchase property with relative ease. The first solution I propose to Toronto's housing crisis needs to happen at the provincial and/or federal level, and it involves instituting a steep tax on property purchases by foreign investors, as well as heavily taxing the profit made on these investments. This would make purchasing property as an investment in Toronto (and indeed all of Canada) far less appealing. Additionally, the federal government should alter its tax structure so as to help enable and encourage non-profit and co-op sectors to purchase more property. This would allow for an increased supply of affordable housing, as these sectors are not focused on extracting as much value as possible from Canadian citizens, but rather providing an essential and fundamental human right to those in need. Implementing these changes would not only greatly increase the market supply of housing in Toronto and throughout Canada, but also would lead to an increased supply of housing specifically designed to be affordable, two things that I believe would do wonders for homelessness in Toronto.
 
-## Second discussion point
+The next change that I propose would be on a municipal level, and involves working to decrease chronic homelessness. As one of the primary long term objectives of shelters is to work as a temporary shelter for people until they can find housing, chronically homeless people represent a failure on the part of shelters. The number of chronically homeless people has increased substantially over the last 2 years, and while part of this increase can certainly be attributed to the pandemic, it still means that there is an increased need for better services aimed at helping homeless people prepare for life in a home. The city needs to focus funding on better social services and workers that can not only prepare homeless people for life in a home, but that can also help them stay in permanent housing one they leave the shelter. This could come in the form of social workers following up with people who have been moved to permanent housing on a monthly or weekly basis, as well as services aimed to help people get the necessary documentation to find and hold a job. While this would not necessarily decrease the amount of new homeless people, it would help make it such that once someone is moved from a shelter to permanent housing, they have a much lower chance of returning to the shelter, allowing the shelter to then allocate more of its time and services towards helping newly homeless people. 
 
-## Third discussion point
-
-## Weaknesses and next steps
-
-Weaknesses and next steps should also be included.
-
-\newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional details
+While this data is certainly not a perfect representation of the demographics and trends in the aggregate homeless population of Toronto, it still gives us a good idea of the changes that need to be made on a municipal, provincial and federal level that I believe if implemented will greatly abate the ever present and growing issue of homelessness in Toronto. 
 
 
 \newpage

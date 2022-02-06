@@ -103,6 +103,7 @@ homeless_ages %>%
 
 
 ### Graphing how homeless populations, grouped by age, fluctuate throughout the year ###
+
 total_homeless <-
   homeless_ages %>% 
   filter(population_group == 'All Population')
@@ -127,7 +128,6 @@ graph_housing %>%
 
 
 
-  
   
          
 
