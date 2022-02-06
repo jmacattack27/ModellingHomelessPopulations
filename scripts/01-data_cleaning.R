@@ -42,16 +42,18 @@ view(populations)
 
 
 ### Saving the Dataset ###
+
 write_csv(populations, "inputs/data/raw_data.csv")
 populations <- read.csv("inputs/data/raw_data.csv")
 
 ### Changing Dates to date objects ###
+
 populations$date.mmm.yy. <- Map(paste, populations$date.mmm.yy., "-01", sep="")
 populations$date.mmm.yy. <- strptime(populations$date.mmm.yy., "%b-%y-%d")
 populations$date.mmm.yy. <- as.Date(populations$date.mmm.yy., format = "%Y-%m-%d")
 names(populations)[2] <- "Date"
 
-### Creating dataset for housing attrition rates ###
+### Creating dataset for housing success rates ###
 
 homeless_housing <-
   populations %>% 
@@ -67,6 +69,7 @@ homeless_housing <-
 
 
 ### Creating dataset for population group and age groups ###
+
 homeless_ages <-
   raw_data %>% 
   select(population_group, Month, ageunder16, age16.24, age25.44, age45.64, age65over) %>% 
@@ -75,6 +78,7 @@ homeless_ages <-
 
 ### Creating dataset for the composition of homeless people (ie how much of the actively homeless population is comprised ###
 ### of each population group and graphing with line chart                                                                 ###
+
 homeless_comp <-
   populations %>% 
   filter(population_group != "All Population") %>% 
@@ -90,11 +94,11 @@ homeless_comp %>%
 
 
 ### Graphing homeless population based on age group and population group ###
+
 homeless_ages <- 
   homeless_ages %>% 
   filter(Date == as.Date("2021-01-01")) %>% 
   filter(population_group != "All Population")
-
 
 homeless_ages %>% 
   ggplot( aes(x = `Age Group`, y = Population, fill = population_group, label = Population)) +
@@ -126,12 +130,6 @@ graph_housing %>%
   geom_point() +
   geom_line(aes(group = `Moved to Housing vs Returned from Housing`))
 
-
-
-  
-         
-
-#### What's next? ####
 
 
          
